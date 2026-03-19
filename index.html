@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AppriShared — Mystery Veggie Boxes from SF Farmer's Markets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:    #f7f3ec;
+  --cream-2:  #ede7db;
+  --cream-3:  #ddd4c4;
+  --brown-1:  #c4a882;
+  --brown-2:  #8a6a45;
+  --brown-3:  #5c3d1e;
+  --brown-4:  #2e1c0a;
+  --green-1:  #e8f0e2;
+  --green-2:  #a8c98a;
+  --green-3:  #5a8c3a;
+  --green-4:  #2d5218;
+  --red-2:    #d4735a;
+  --yellow-1: #fdf3d0;
+  --yellow-2: #e8c74a;
+  --white:    #ffffff;
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Instrument Sans', system-ui, sans-serif;
+  --r-sm: 6px;
+  --r-md: 12px;
+  --r-lg: 20px;
+  --r-xl: 32px;
+  --r-pill: 999px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--brown-4);
+  line-height: 1.6;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+  height: 60px;
+  background: rgba(247, 243, 236, 0.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--cream-3);
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--brown-4);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+.nav-logo sup {
+  font-size: 0.55rem;
+  background: var(--green-3);
+  color: white;
+  padding: 1px 5px;
+  border-radius: var(--r-pill);
+  font-family: var(--font-body);
+  font-weight: 500;
+  vertical-align: super;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-left: 3px;
+}
+.nav-right { display: flex; align-items: center; gap: 1.5rem; }
+.nav-right a { font-size: 0.875rem; color: var(--brown-2); text-decoration: none; transition: color 0.2s; }
+.nav-right a:hover { color: var(--brown-4); }
+.nav-btn {
+  background: var(--brown-4);
+  color: var(--cream);
+  border: none;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--r-pill);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.2s, transform 0.15s;
+}
+.nav-btn:hover { background: var(--brown-3); transform: translateY(-1px); }
+
+/* HERO */
+.hero {
+  min-height: calc(100vh - 60px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 4rem;
+  padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem);
+  max-width: 1160px;
+  margin: 0 auto;
+}
+
+.hero-city {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--green-3);
+  margin-bottom: 1.25rem;
+}
+.hero-city::before { content: '📍'; font-size: 12px; }
+
+h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--brown-4);
+  margin-bottom: 1.25rem;
+}
+h1 em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--green-3);
+}
+
+.hero-desc {
+  font-size: 1rem;
+  color: var(--brown-2);
+  max-width: 420px;
+  margin-bottom: 2.25rem;
+  line-height: 1.75;
+}
+
+.capture-form {
+  display: flex;
+  gap: 0;
+  background: var(--white);
+  border: 1.5px solid var(--cream-3);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(46, 28, 10, 0.08);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.capture-form:focus-within {
+  border-color: var(--green-3);
+  box-shadow: 0 4px 24px rgba(90, 140, 58, 0.15);
+}
+.capture-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0.8rem 1.25rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  background: transparent;
+  color: var(--brown-4);
+}
+.capture-input::placeholder { color: var(--brown-1); }
+.capture-btn {
+  background: var(--green-3);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.4rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.capture-btn:hover { background: var(--green-4); }
+
+.hero-sub {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--brown-1);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.hero-sub::before { content: '✓'; color: var(--green-3); font-weight: 700; }
+
+/* BOX VISUAL */
+.box-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mystery-box {
+  background: var(--white);
+  border: 1.5px solid var(--cream-3);
+  border-radius: var(--r-xl);
+  padding: 2rem;
+  width: 300px;
+  position: relative;
+  z-index: 2;
+  animation: bobble 5s ease-in-out infinite;
+  box-shadow: 0 24px 64px rgba(46, 28, 10, 0.1);
+}
+@keyframes bobble {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50%       { transform: translateY(-12px) rotate(-1deg); }
+}
+
+.box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+.box-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--brown-2);
+}
+.box-live {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--red-2);
+}
+.live-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--red-2);
+  animation: blink 1.5s ease-in-out infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+.box-produce {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+.produce-item {
+  background: var(--cream);
+  border-radius: var(--r-md);
+  padding: 0.6rem 0.4rem;
+  text-align: center;
+  font-size: 1.4rem;
+  border: 1px solid var(--cream-2);
+  transition: transform 0.2s;
+}
+.produce-item:hover { transform: scale(1.08); }
+.produce-item.mystery {
+  background: var(--brown-4);
+  border-color: var(--brown-4);
+  font-size: 1.2rem;
+}
+
+.box-name {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--brown-4);
+  margin-bottom: 0.3rem;
+}
+.box-origin {
+  font-size: 0.8rem;
+  color: var(--brown-2);
+  margin-bottom: 1.25rem;
+}
+
+.box-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--cream-2);
+}
+.box-price {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--brown-4);
+}
+.box-price sub {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--brown-2);
+  vertical-align: baseline;
+}
+.box-was {
+  font-size: 0.82rem;
+  color: var(--brown-1);
+  text-decoration: line-through;
+}
+.box-save {
+  background: var(--yellow-1);
+  border: 1px solid var(--yellow-2);
+  color: var(--brown-3);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--r-pill);
+}
+
+.box-cta {
+  margin-top: 1rem;
+  width: 100%;
+  background: var(--green-3);
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: var(--r-md);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+.box-cta:hover { background: var(--green-4); transform: translateY(-1px); }
+
+.chip {
+  position: absolute;
+  background: var(--white);
+  border: 1.5px solid var(--cream-3);
+  border-radius: var(--r-lg);
+  padding: 0.55rem 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--brown-3);
+  white-space: nowrap;
+  box-shadow: 0 6px 20px rgba(46, 28, 10, 0.09);
+  animation: driftA 6s ease-in-out infinite;
+}
+@keyframes driftA {
+  0%, 100% { transform: translateY(0) rotate(2deg); }
+  50%       { transform: translateY(-8px) rotate(2deg); }
+}
+.chip.b { animation: driftB 7s ease-in-out infinite; animation-delay: -3s; }
+@keyframes driftB {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50%       { transform: translateY(-6px) rotate(-3deg); }
+}
+.chip-1 { top: 0; left: -3rem; }
+.chip-2 { bottom: 2rem; right: -3rem; }
+
+/* MARKETS STRIP */
+.markets-strip {
+  background: var(--brown-4);
+  padding: 1.5rem clamp(1.5rem, 5vw, 4rem);
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  overflow: hidden;
+  flex-wrap: wrap;
+}
+.markets-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.4);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.markets-list { display: flex; gap: 2rem; flex-wrap: wrap; }
+.market-name {
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.7);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.market-name::before {
+  content: '';
+  display: inline-block;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--green-2);
+}
+
+/* HOW IT WORKS */
+.how-section {
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.section-eyebrow {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--green-3);
+  font-weight: 500;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--brown-4);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 3rem;
+}
+.section-title em { font-style: italic; color: var(--green-3); }
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--cream-3);
+  border: 1px solid var(--cream-3);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+}
+.step { background: var(--white); padding: 2rem; }
+.step:first-child { border-radius: var(--r-xl) 0 0 var(--r-xl); }
+.step:last-child  { border-radius: 0 var(--r-xl) var(--r-xl) 0; }
+.step-num {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--cream-2);
+  line-height: 1;
+  margin-bottom: 0.75rem;
+}
+.step-icon { font-size: 1.6rem; margin-bottom: 0.75rem; display: block; }
+.step-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--brown-4);
+  margin-bottom: 0.5rem;
+}
+.step-desc { font-size: 0.875rem; color: var(--brown-2); line-height: 1.65; }
+
+/* WHY */
+.why-section {
+  background: var(--brown-4);
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem);
+}
+.why-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+.why-section .section-eyebrow { color: var(--green-2); }
+.why-section .section-title { color: var(--white); margin-bottom: 1.5rem; }
+.why-desc { color: rgba(255,255,255,0.6); font-size: 0.95rem; line-height: 1.75; }
+.why-cards { display: flex; flex-direction: column; gap: 1rem; }
+.why-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--r-lg);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: background 0.2s;
+}
+.why-card:hover { background: rgba(255,255,255,0.1); }
+.why-card-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+.why-card-title { font-size: 0.9rem; font-weight: 500; color: rgba(255,255,255,0.9); margin-bottom: 0.2rem; }
+.why-card-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.55; }
+
+/* SAMPLE BOXES */
+.box-section {
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 5vw, 4rem);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.box-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+.sample-card {
+  background: var(--white);
+  border: 1.5px solid var(--cream-2);
+  border-radius: var(--r-xl);
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.sample-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(46,28,10,0.1);
+}
+.sample-season { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--brown-1); font-weight: 500; margin-bottom: 0.75rem; }
+.sample-items { font-size: 1.8rem; margin-bottom: 0.75rem; letter-spacing: 0.05em; }
+.sample-name { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--brown-4); margin-bottom: 0.25rem; }
+.sample-desc { font-size: 0.8rem; color: var(--brown-2); line-height: 1.55; }
+.sample-price {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--cream-2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.price-big { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--brown-4); }
+.price-tag { font-size: 0.75rem; color: var(--brown-2); }
+
+/* CTA */
+.cta-section {
+  background: var(--green-1);
+  border-top: 1px solid var(--green-2);
+  border-bottom: 1px solid var(--green-2);
+  padding: clamp(4rem, 8vw, 6rem) clamp(1.5rem, 5vw, 4rem);
+  text-align: center;
+}
+.cta-section .section-eyebrow { text-align: center; }
+.cta-section .section-title { margin: 0 auto 1.25rem; max-width: 520px; }
+.cta-desc { color: var(--brown-2); font-size: 0.95rem; max-width: 400px; margin: 0 auto 2.5rem; line-height: 1.7; }
+.cta-form {
+  display: flex;
+  gap: 0;
+  max-width: 400px;
+  margin: 0 auto 1rem;
+  background: var(--white);
+  border: 1.5px solid var(--green-2);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(90,140,58,0.12);
+}
+.cta-form:focus-within { border-color: var(--green-3); }
+.cta-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0.8rem 1.25rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  background: transparent;
+  color: var(--brown-4);
+}
+.cta-input::placeholder { color: var(--brown-1); }
+.cta-btn {
+  background: var(--green-3);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.4rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+.cta-btn:hover { background: var(--green-4); }
+.cta-note { font-size: 0.78rem; color: var(--brown-1); margin-top: 0.75rem; }
+
+/* SUCCESS */
+.success-msg {
+  display: none;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--green-4);
+  font-weight: 500;
+  margin-top: 0.75rem;
+  justify-content: center;
+}
+.success-msg.show { display: flex; }
+
+/* FOOTER */
+footer {
+  background: var(--brown-4);
+  padding: 2.5rem clamp(1.5rem, 5vw, 4rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-logo { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: rgba(255,255,255,0.85); text-decoration: none; }
+footer p { font-size: 0.8rem; color: rgba(255,255,255,0.3); }
+
+/* RESPONSIVE */
+@media (max-width: 800px) {
+  .hero { grid-template-columns: 1fr; text-align: center; gap: 2.5rem; }
+  .hero-desc { margin-left: auto; margin-right: auto; }
+  .capture-form { margin: 0 auto; }
+  .hero-sub { justify-content: center; }
+  .box-visual { order: -1; }
+  .chip-1, .chip-2 { display: none; }
+  .steps { grid-template-columns: 1fr; }
+  .step:first-child { border-radius: var(--r-xl) var(--r-xl) 0 0; }
+  .step:last-child  { border-radius: 0 0 var(--r-xl) var(--r-xl); }
+  .why-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  nav .nav-right a:not(.nav-btn) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">AppriShared <sup>SF</sup></a>
+  <div class="nav-right">
+    <a href="#how">How it works</a>
+    <a href="#box">What's in the box</a>
+    <a href="#waitlist" class="nav-btn">Join waitlist</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="background: var(--cream);">
+  <div class="hero">
+    <div>
+      <div class="hero-city">San Francisco, CA — launching soon</div>
+      <h1>A box of fresh local produce. <em>Rescued. Affordable.</em> Yours.</h1>
+      <p class="hero-desc">At the end of every SF farmer's market day, vendors head home with unsold fresh produce. We buy it, pack it into a mystery veggie box, and sell it to you — for just $15.</p>
+
+      <form class="capture-form" id="hero-form" onsubmit="handleSignup(event,'hero')">
+        <input class="capture-input" type="email" placeholder="your@email.com" required>
+        <button type="submit" class="capture-btn">Get early access →</button>
+      </form>
+      <div class="success-msg" id="hero-success">🎉 You're on the list! We'll ping you when your first box is ready.</div>
+      <p class="hero-sub">No spam. Just a ping when your first box is ready.</p>
+    </div>
+
+    <div class="box-visual">
+      <div class="chip chip-1">🌿 SF farmer's markets</div>
+
+      <div class="mystery-box">
+        <div class="box-header">
+          <span class="box-label">This Saturday's box</span>
+          <span class="box-live"><span class="live-dot"></span> Limited supply</span>
+        </div>
+
+        <div class="box-produce">
+          <div class="produce-item">🥦</div>
+          <div class="produce-item">🍅</div>
+          <div class="produce-item">🥕</div>
+          <div class="produce-item">🥬</div>
+          <div class="produce-item">🫑</div>
+          <div class="produce-item mystery">❓</div>
+        </div>
+
+        <div class="box-name">Mystery Veggie Box</div>
+        <div class="box-origin">Sourced from Ferry Building &amp; Alemany markets</div>
+
+        <div class="box-price-row">
+          <div>
+            <div class="box-price">$15 <sub>/ box</sub></div>
+            <div class="box-was">Retail value ~$35–45</div>
+          </div>
+          <div class="box-save">Save 60%+</div>
+        </div>
+
+        <button class="box-cta" onclick="document.getElementById('waitlist').scrollIntoView({behavior:'smooth'})">
+          Join waitlist to claim →
+        </button>
+      </div>
+
+      <div class="chip b chip-2">🏡 Community-first</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKETS STRIP -->
+<div class="markets-strip">
+  <span class="markets-label">SF markets we source from</span>
+  <div class="markets-list">
+    <span class="market-name">Ferry Building Marketplace</span>
+    <span class="market-name">Alemany Farmer's Market</span>
+    <span class="market-name">Castro Farmer's Market</span>
+    <span class="market-name">Heart of the City</span>
+    <span class="market-name">Mission Community Market</span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <span class="section-eyebrow">Simple by design</span>
+  <h2 class="section-title">From market stall to your hands — <em>same day.</em></h2>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <span class="step-icon">🌾</span>
+      <div class="step-title">Vendors wind down</div>
+      <p class="step-desc">As SF farmer's markets close, vendors are left with fresh, unsold produce they'd otherwise haul home. We show up and buy it directly.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <span class="step-icon">📦</span>
+      <div class="step-title">We pack your box</div>
+      <p class="step-desc">We hand-pack a mystery veggie box with whatever came in that day — always fresh, always local, always a little surprise.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <span class="step-icon">🛍️</span>
+      <div class="step-title">You pick it up</div>
+      <p class="step-desc">Reserve your $15 box, swing by a pickup spot near you in SF, and walk away with farm-fresh produce for the week.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY IT MATTERS -->
+<section class="why-section">
+  <div class="why-inner">
+    <div>
+      <span class="section-eyebrow">Why AppriShared</span>
+      <h2 class="section-title">Good for you. Good for farmers. Good for SF.</h2>
+      <p class="why-desc">Every Saturday, perfectly good local produce gets hauled back or tossed simply because the market day ended. That's a waste of food, money, and the farmer's effort. AppriShared closes that gap — turning surplus into something the whole community benefits from.</p>
+    </div>
+    <div class="why-cards">
+      <div class="why-card">
+        <div class="why-card-icon">🥬</div>
+        <div>
+          <div class="why-card-title">Fresh produce at half the price</div>
+          <div class="why-card-desc">A $15 box holds produce with $35–45 retail value, still at peak freshness from that morning's harvest.</div>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-icon">🌾</div>
+        <div>
+          <div class="why-card-title">Real revenue for local farmers</div>
+          <div class="why-card-desc">Vendors earn money they'd otherwise write off. Every box sold helps a small SF farm stay viable.</div>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-icon">♻️</div>
+        <div>
+          <div class="why-card-title">Zero food wasted</div>
+          <div class="why-card-desc">Nothing gets tossed. Every vegetable in your box was rescued from the end of a real market day.</div>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-icon">🏘️</div>
+        <div>
+          <div class="why-card-title">Hyper-local, always</div>
+          <div class="why-card-desc">We source only from SF farmer's markets. Your food travels miles, not thousands of miles.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SAMPLE BOXES -->
+<section class="box-section" id="box">
+  <span class="section-eyebrow">What to expect</span>
+  <h2 class="section-title">Every box is a <em>surprise.</em> Always seasonal.</h2>
+
+  <div class="box-grid">
+    <div class="sample-card">
+      <div class="sample-season">Spring box · example</div>
+      <div class="sample-items">🥬🫛🌿🥦</div>
+      <div class="sample-name">The Green Haul</div>
+      <div class="sample-desc">Chard, snap peas, fresh herbs, and broccoli. Great for stir-fries and quick weeknight dinners.</div>
+      <div class="sample-price">
+        <span class="price-big">$15</span>
+        <span class="price-tag">~$38 retail value</span>
+      </div>
+    </div>
+    <div class="sample-card">
+      <div class="sample-season">Summer box · example</div>
+      <div class="sample-items">🍅🌽🫑🥒</div>
+      <div class="sample-name">The Sunshine Bag</div>
+      <div class="sample-desc">Heirloom tomatoes, corn, peppers, and cucumber. Peak summer freshness, straight from the stall.</div>
+      <div class="sample-price">
+        <span class="price-big">$15</span>
+        <span class="price-tag">~$42 retail value</span>
+      </div>
+    </div>
+    <div class="sample-card">
+      <div class="sample-season">Fall box · example</div>
+      <div class="sample-items">🥕🧅🥔🎃</div>
+      <div class="sample-name">The Root Bundle</div>
+      <div class="sample-desc">Carrots, onions, potatoes, and squash. Slow-roast heaven for the cooler months ahead.</div>
+      <div class="sample-price">
+        <span class="price-big">$15</span>
+        <span class="price-tag">~$36 retail value</span>
+      </div>
+    </div>
+  </div>
+
+  <p style="margin-top:1.5rem;font-size:0.85rem;color:var(--brown-2);text-align:center;">
+    ✦ The mystery is part of the fun — actual contents vary each week based on what SF vendors have available that day.
+  </p>
+</section>
+
+<!-- WAITLIST CTA -->
+<section class="cta-section" id="waitlist">
+  <span class="section-eyebrow">Be first in SF</span>
+  <h2 class="section-title">Ready to rescue your first <em>veggie box?</em></h2>
+  <p class="cta-desc">We're launching in San Francisco soon. Join the waitlist and we'll let you know the moment your first $15 box is available.</p>
+
+  <form class="cta-form" id="cta-form" onsubmit="handleSignup(event,'cta')">
+    <input class="cta-input" type="email" placeholder="your@email.com" required>
+    <button type="submit" class="cta-btn">Claim my spot →</button>
+  </form>
+  <div class="success-msg" id="cta-success">🎉 You're on the list! First box is yours.</div>
+  <p class="cta-note">No credit card. No commitment. Just fresh vegetables.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a class="footer-logo" href="#">AppriShared</a>
+  <p>Rescuing surplus produce from SF farmer's markets — one box at a time.</p>
+  <p>© 2025 AppriShared · San Francisco, CA</p>
+</footer>
+
+<script>
+function handleSignup(e, id) {
+  e.preventDefault();
+  const form = e.target;
+  form.style.opacity = '0.5';
+  form.style.pointerEvents = 'none';
+  setTimeout(() => {
+    form.style.display = 'none';
+    document.getElementById(id + '-success').classList.add('show');
+  }, 500);
+}
+</script>
+</body>
+</html>
